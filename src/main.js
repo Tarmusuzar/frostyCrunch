@@ -9,6 +9,7 @@ import MainRuv from './components/MainRuv.vue'
 import ComingSoon from  './components/ComingSoon.vue'
 import AdminDashboard from './components/Admin/AdminDashboard'
 import PlaceOrder from './components/Admin/PlaceOrder/PlaceOrder'
+import Login from './components/Admin/LogIn'
 import CreateOwn from'./components/CreateOwn'
 
 const router = createRouter({
@@ -24,6 +25,10 @@ const router = createRouter({
         {
             path:'/discover',
             component: MainDiscover
+        },
+        {
+            path:'/login',
+            component: Login
         },
         {
             path:'/createown',

@@ -5,7 +5,7 @@
     title="Sales "
     opt1="Sales"
     opt2="Place Order"
-    opt3="WareHouse"
+    opt3="Reports"
     
     ></home-nav>
 

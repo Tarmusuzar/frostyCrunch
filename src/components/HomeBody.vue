@@ -60,7 +60,6 @@ p {
   background-color: #dbb300; /* Darker yellow on hover */
 }
 
-@media screen and (max-width: 768px) {
   .hero-section {
     flex-direction: column;
     text-align: center;
@@ -68,10 +67,11 @@ p {
 
   .hero-text {
     margin-top: 20px;
+    margin-bottom: 4rem;
   }
 
   .cta-button {
     margin-top: 20px;
   }
-}
+
 </style>

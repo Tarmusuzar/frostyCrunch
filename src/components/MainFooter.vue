@@ -1,36 +1,48 @@
 <template>
-    <footer>
-      <div class="footer-content">
-        <p>&copy; Frosty Crunch Ltd 2023</p>
-        <p>FrostyCrunch12@gmail.com </p>
-        <p>Built by Francis </p>
+  <footer class="frosty-footer">
+    <div class="footer-links">
+      <a @click="$router.push('/menu')">Order Now</a>
+      <a @click="$router.push('/login')">Login</a>
+      <a @click="promptToCall" >Contact</a>
+    </div>
+    <div class="copyright">
+      &copy; Frosty Crunch 2024
+    </div>
+  </footer>
+</template>
+<script>
+export default {
+  methods: {
+    promptToCall() {
+      const phoneNumber = '0547800635';
+      const url = `tel:${phoneNumber}`;
+      window.location.href = url;
+    }
+  }
+}
+</script>
 
-      </div>
-    </footer>
-  </template>
-  
-  <style scoped>
-  /* Add your custom styles here */
-  
-  footer {
-    background: linear-gradient(to bottom, #ffffff, #fbb03b); /* White to McDonald's yellow gradient */
-    padding: 20px 0;
-    text-align: center;
-    color: #d8232a; /* McDonald's red */
-  }
-  
-  .footer-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  p {
-    margin: 5px 0;
-  }
-  
-  input {
-    margin-left: 5px;
-  }
-  </style>
-  
+<style scoped>
+.frosty-footer {
+  background-color: #333;
+  padding: 15px 0;
+  color: #fff;
+  text-align: center;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #fff;
+  margin: 0 15px;
+  font-size: 16px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  margin-top: 10px;
+  font-size: 14px;
+}
+</style>

@@ -1,9 +1,9 @@
 <template>
-  <section style=" background-color: #ffecd0; margin-top: -20px;">
+  <section style="  margin-top: -20px;">
     <!-- Header Section -->
     <div class="header">
-      <h2 style="margin-left: 0;" class="label head">Frosty Menu</h2>
-      <button class="make" @click="$router.push('/createOwn')">Make Your Own</button>
+      <h2 style="margin-left: 0; flex: 1;" class="label head"> Menu</h2>
+      <button style="flex:1;" class="make" @click="$router.push('/createOwn')">Make Your Own</button>
     </div>
 
     <!-- Cart Icon -->
@@ -166,7 +166,6 @@ export default {
     font-family: 'Helvetica Neue', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f8f8; /* Light gray background */
     color: #333; /* Dark gray text */
   }
 
@@ -196,7 +195,7 @@ export default {
   .header {
     display: flex;
     justify-content: space-between;
-    max-width: 80%;
+    max-width: 86%;
     margin: 1rem 0.4rem;
   }
 
@@ -230,6 +229,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
+    
     /* Enable horizontal scrolling */
   }
 
@@ -375,7 +375,10 @@ export default {
 
   .make {
     margin: 1rem;
+    
+    
   }
+
   .label{
     text-align: left;
     padding-bottom: 1rem;
@@ -385,10 +388,7 @@ export default {
     
   }
   .head{
-    background: linear-gradient(to right, red, rgb(252, 248, 4));
-            -webkit-background-clip: text;
-            color: transparent;
-            font-size: 1.9rem;
+                font-size: 1.9rem;
             max-width: 600px;
             font-weight: 600;
   }

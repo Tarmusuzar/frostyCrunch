@@ -1,72 +1,64 @@
 <template>
-  <div id="app">
-    <div class="ice-cream-container">
-      <h1 class="title">Make Your Own</h1>
+  <div class="popup">
+    <button class="order-button cancel" @click="$emit('closeOptions')">Cancel</button>
 
-      <!-- Step Navigation -->
-      <div class="step-navigation">
-        <button @click="setStep(1)" :class="{ active: currentStep === 1 }">1. Choose Treat</button>
-        <button @click="setStep(2)" :class="{ active: currentStep === 2 }" :disabled="currentStep < 2">2. Customize</button>
-        <button @click="setStep(3)" :class="{ active: currentStep === 3 }" :disabled="currentStep < 3">3. Review</button>
+    <div id="app">
+  <div class="ice-cream-container">
+    <h1 class="title">Make Your Own</h1>
+
+    <!-- Step Navigation -->
+    
+
+    
+
+    <!-- Step 2: Customize -->
+    <div v-show="currentStep === 1">
+      <label class="label">Select Flavor:</label>
+      <div class="button-group">
+        <button @click="selectFlavor('mango')" :class="{ active: selectedFlavor === 'mango' }"  class="optBtn">Mango</button>
+        <button @click="selectFlavor('strawberry')" :class="{ active: selectedFlavor === 'strawberry' }" class="optBtn">Strawberry</button>
+        <button @click="selectFlavor('cherry')" :class="{ active: selectedFlavor === 'cherry' }" class="optBtn">Cherry</button>
+        <button @click="selectFlavor('vanilla')" :class="{ active: selectedFlavor === 'vanilla' }" class="optBtn">Vanilla</button>
+        <button @click="selectFlavor('banana')" :class="{ active: selectedFlavor === 'banana' }" class="optBtn">Banana</button>
+        <button @click="selectFlavor('pinacolada')" :class="{ active: selectedFlavor === 'pinacolada' }" class="optBtn">Pinacolada</button>
       </div>
 
-      <!-- Step 1: Choose Treat -->
-      <div v-show="currentStep === 1" class="selection-group">
-        <label class="label">Choose Your Treat:</label>
-        <div class="button-group">
-          <button @click="selectTreat('frozenBanana')" :class="{ active: selectedTreat === 'frozenBanana' }" class="optBtn">Frozen Banana</button>
-          <button @click="selectTreat('popsicle')" :class="{ active: selectedTreat === 'popsicle' }" class="optBtn">Popsicle Ice Cream</button>
-          <button @click="selectTreat('cup')" :class="{ active: selectedTreat === 'cup' }" class="optBtn">Cup Ice Cream</button>
-          <button @click="selectTreat('cone')" :class="{ active: selectedTreat === 'cone' }" class="optBtn">Cone Ice Cream</button>
-        </div>
+      <label class="label">Choose Size:</label>
+      <div class="button-group">
+        <button @click="selectSize('small')" :class="{ active: selectedSize === 'small' }" class="optBtn">Small</button>
+        <button @click="selectSize('large')" :class="{ active: selectedSize === 'large' }" class="optBtn">Large</button>
       </div>
 
-      <!-- Step 2: Customize -->
-      <div v-show="currentStep === 2">
-        <label class="label">Select Flavor:</label>
-        <div class="button-group">
-          <button @click="selectFlavor('mango')" :class="{ active: selectedFlavor === 'mango' }"  class="optBtn">Mango</button>
-          <button @click="selectFlavor('strawberry')" :class="{ active: selectedFlavor === 'strawberry' }" class="optBtn">Strawberry</button>
-          <button @click="selectFlavor('cherry')" :class="{ active: selectedFlavor === 'cherry' }" class="optBtn">Cherry</button>
-          <button @click="selectFlavor('vanilla')" :class="{ active: selectedFlavor === 'vanilla' }" class="optBtn">Vanilla</button>
-          <button @click="selectFlavor('banana')" :class="{ active: selectedFlavor === 'banana' }" class="optBtn">Banana</button>
-          <button @click="selectFlavor('pinacolada')" :class="{ active: selectedFlavor === 'pinacolada' }" class="optBtn">Pinacolada</button>
-        </div>
-
-        <label class="label">Choose Size:</label>
-        <div class="button-group">
-          <button @click="selectSize('small')" :class="{ active: selectedSize === 'small' }" class="optBtn">Small</button>
-          <button @click="selectSize('large')" :class="{ active: selectedSize === 'large' }" class="optBtn">Large</button>
-        </div>
-
-        <label class="label">Pick a Dip:</label>
-        <div class="button-group">
-          <button @click="selectDip('milkChocolate')" :class="{ active: selectedDip === 'milkChocolate' }" class="optBtn">Milk Chocolate 🍫</button>
-          <button @click="selectDip('white')" :class="{ active: selectedDip === 'white' }" class="optBtn">White 🍦</button>
-          <button @click="selectDip('dark')" :class="{ active: selectedDip === 'dark' }" class="optBtn">Dark 🍫</button>
-          <button @click="selectDip('peanutButter')" :class="{ active: selectedDip === 'peanutButter' }" class="optBtn">Peanut Butter 🥜</button>
-          <button @click="selectDip('saltedCaramel')" :class="{ active: selectedDip === 'saltedCaramel' }" class="optBtn">Salted Caramel 🍯</button>
-        </div>
+      <label class="label">Pick a Dip:</label>
+      <div class="button-group">
+        <button @click="selectDip('milkChocolate')" :class="{ active: selectedDip === 'milkChocolate' }" class="optBtn">Milk Chocolate 🍫</button>
+        <button @click="selectDip('white')" :class="{ active: selectedDip === 'white' }" class="optBtn">White 🍦</button>
+        <button @click="selectDip('dark')" :class="{ active: selectedDip === 'dark' }" class="optBtn">Dark 🍫</button>
+        <button @click="selectDip('peanutButter')" :class="{ active: selectedDip === 'peanutButter' }" class="optBtn">Peanut Butter 🥜</button>
+        <button @click="selectDip('saltedCaramel')" :class="{ active: selectedDip === 'saltedCaramel' }" class="optBtn">Salted Caramel 🍯</button>
       </div>
-
-      <!-- Step 3: Review -->
-      <div v-show="currentStep === 3" class="order-summary">
-        <h3>Your Delicious Creation:</h3>
-        <p>🍦 Treat: {{ selectedSize }} {{ selectedFlavor }} {{ selectedTreat }}</p>
-        <p>🍫 Dip: {{ selectedDip }}</p>
-        <p>🎉 Toppings: {{ selectedToppings.join(', ') || 'None' }}</p>
-        <p>🌈 Drizzle: {{ selectedDrizzle === 'none' ? 'None' : selectedDrizzle + ' (AED 4 extra)' }}</p>
-        <h3>Total Price: AED {{ totalPrice.toFixed(2) }}</h3>
-      </div>
-
-      <!-- Next/Place Order Button -->
-      <button @click="nextStep" class="order-button" :disabled="currentStep === 3">{{ currentStep === 3 ? 'Place Order' : 'Next' }}</button>
     </div>
+
+    <!-- Step 3: Review -->
+    <div v-show="currentStep === 3" class="order-summary">
+      <h3>Your Delicious Creation:</h3>
+      <p>🍦 Treat: {{ selectedSize }} {{ selectedFlavor }} {{ selectedTreat }}</p>
+      <p>🍫 Dip: {{ selectedDip }}</p>
+      <p>🎉 Toppings: {{ selectedToppings.join(', ') || 'None' }}</p>
+      <p>🌈 Drizzle: {{ selectedDrizzle === 'none' ? 'None' : selectedDrizzle + ' (AED 4 extra)' }}</p>
+      <h3>Total Price: AED {{ totalPrice.toFixed(2) }}</h3>
+    </div>
+
+    <!-- Next/Place Order Button -->
+    <button  @click="$emit('closeOptions')" class="order-button" :disabled="currentStep === 3">{{ currentStep === 3 ? 'Place Order' : 'Next' }}</button>
+  </div>
+</div>
   </div>
 </template>
 
 <script>
 export default {
+  emit:['closeOptions'],
   data() {
     return {
       currentStep: 1,
@@ -129,12 +121,26 @@ export default {
 </script>
 
 <style scoped>
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(22, 22, 22, 0.95);
+
+  z-index: 1000;
+  overflow: scroll;
+}
 #app {
+  width: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
-  width: 100%;
+  margin:2rem auto;
+  min-width: 15px;
+
+  
 }
 
 .ice-cream-container {
@@ -242,6 +248,9 @@ export default {
 .active{
   background-color: green;
   color: white;
+}
+.cancel{
+  margin: .4rem 0;
 }
 
 </style>

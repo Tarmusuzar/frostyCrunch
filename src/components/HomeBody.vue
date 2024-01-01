@@ -1,4 +1,5 @@
 <template>
+  <main-loading v-if="loading"></main-loading>
     <div id="app">
       <create-own v-if="selectOptions" @closeOptions="selectOptions=false"></create-own>
       <pop-up @itemSelected="selectOptions=true" v-if="selectedCategory" :selectedCategory="selectedCategory" @closePopup="closePopup"></pop-up>
@@ -21,44 +22,55 @@
   <script>
   import CreateOwn from './CreateOwn.vue';
   import PopUp from './Reusables/PopUp.vue';
+  import MainLoading from './Reusables/MainLoading.vue';
   export default {
+    created(){
+      this.loading=true
+
+    },
+    mounted(){
+      this.loading=false
+
+    },
     components:{
       PopUp, 
-      CreateOwn
+      CreateOwn,
+      MainLoading
     },
     data() {
       return {
+        loading:false,
         selectOptions:false,
         categories: [
-          { id: 1, image:'kids.png', name: 'Dark Chocolate', description: 'Delicious frozen banana treats.', backgroundColor: '#ffcc29', 
+          { id: 1, image:'kids.png', name: 'Frozen Banana', description: 'Delicious frozen banana treats.', backgroundColor: '#ffcc29', 
           items: [
             {
               id: 1,
               name: 'White Chocolate',
               description: 'The classic frozen banana',
               price: 19,
-              image: 'kids.png'
+              image: 'cat/white.png'
 },
             {
               id: 1,
               name: 'Milk Chocolate',
               description: 'The classic frozen banana',
               price: 19,
-              image: 'special.png'
+              image: 'cat/milk.png'
 },
             {
               id: 1,
               name: 'Peanut Butter',
               description: 'The classic frozen banana',
               price: 19,
-              image: 'classic.png'
+              image: 'cat/peanut.png'
 },
             {
               id: 1,
               name: 'Salted Caramel',
               description: 'The classic frozen banana',
               price: 19,
-              image: 'best.png'
+              image: 'cat/caramel.png'
 },
        
             {
@@ -66,10 +78,54 @@
               name: 'Plain',
               description: 'The classic frozen banana',
               price: 19,
-              image: 'special.png'
+              image: 'cat/white.png'
 },
 ] },
-          { id: 2, image:'popsicle.png', name: 'Popsicle Ice Cream', description: 'Colorful and refreshing popsicles.', backgroundColor: '#ffcc29', items: [] },
+          { id: 2, image:'popsicle.png', name: 'Popsicle Ice Cream', description: 'Colorful and refreshing popsicles.', backgroundColor: '#ffcc29', 
+          items: [
+          {
+              id: 1,
+              name: 'Mango',
+              description: 'The amazing mango Fruit icecream',
+              price: '25 | 13',
+              image: 'cat/Mango.png'
+},
+          {
+              id: 2,
+              name: 'Strawberry',
+              description: 'The amazing strawberry Fruit icecream',
+              price: '25 | 13',
+              image: 'cat/strawberry.png'
+},
+          {
+              id: 3,
+              name: 'Chestnut & Vanilla',
+              description: 'The amazing chesntut Fruit icecream',
+              price: '25 | 13',
+              image: 'cat/chestnut.png'
+},
+          {
+              id: 4,
+              name: 'Banana',
+              description: 'The amazing banana Fruit icecream',
+              price: '25 | 13',
+              image: 'cat/banana.png'
+},
+          {
+              id: 5,
+              name: 'Pinacolada',
+              description: 'The amazing pineapple Fruit icecream',
+              price: '25 | 13',
+              image: 'cat/pinacolada.png'
+},
+          {
+              id: 6,
+              name: 'Cherry',
+              description: 'The amazing pineapple Fruit icecream',
+              price: '25 | 13',
+              image: 'cat/cherry.png'
+},
+          ] },
           { id: 3, image:'cup.png', name: 'Cup Ice Cream', description: 'Creamy ice cream in cups.', backgroundColor: '#ffcc29', items: [] },
           { id: 4, image:'cone.png', name: 'Cone Ice Cream', description: 'Classic cone ice cream delights.', backgroundColor: '#ffcc29', items: [] },
           { id: 5, image:'shakes.png', name: 'Milkshakes', description: 'Thick and tasty milkshakes.', backgroundColor: '#ffcc29', items: [] },
@@ -93,6 +149,8 @@
       },
     },
   };
+
+  
   </script>
   
   <style scoped>

@@ -1,4 +1,5 @@
 <template>
+  <main-loading v-if="loading"></main-loading>
     <div  class="popup">
        <div class="sub">
         <div class="innav">
@@ -11,7 +12,7 @@
           <div class="item-details">
             <p class="item-name">{{ item.name }}</p>
             <p class="description">{{ item.description }}</p>
-            <p class="price">Dhs {{ item.price.toFixed(2) }} </p>
+            <p class="price">Dhs {{ item.price }} </p>
             <button @click="addToCart(item)" class="add">Add to Cart</button>
           </div>
         </div>
@@ -24,9 +25,25 @@
        </div>
 </template>
 <script>
+import MainLoading from './MainLoading.vue';
     export default{
+      created(){
+       this.loading=true
+      },
+      mounted(){
+        
+          this.loading=false
+
+        
+      },
+        components:{MainLoading},
         props:['selectedCategory'],
-        emits:['closePopup','itemSelected']
+        emits:['closePopup','itemSelected'],
+        data(){
+          return{
+            loading:false
+          }
+        }
     }
 </script>
 <style scoped>
@@ -36,7 +53,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(22, 22, 22, 0.95);
+  background: rgba(51, 51, 51, 0.95);
 
   z-index: 999;
   overflow: scroll;

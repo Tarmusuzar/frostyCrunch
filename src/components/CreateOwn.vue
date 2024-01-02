@@ -72,6 +72,9 @@ export default {
     };
   },
   methods: {
+    addToCart(){
+
+    },
     setStep(step) {
       this.currentStep = step;
     },

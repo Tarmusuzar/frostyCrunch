@@ -1,5 +1,5 @@
 <template>
-    <div class="loading-overlay" >
+    <div class="loading-overlay" v-if="loading">
       <div class="loading-spinner"></div>
     </div>
   </template>
@@ -35,18 +35,16 @@
   
   <script>
   export default {
-    data() {
-      return {
-        isLoading: true, // Set to true by default, you can change it based on your loading logic
-      };
-    },
-    // You can use lifecycle hooks like created or mounted to handle loading logic
-    // For example, you can set isLoading to false after data is loaded
-    // created() {
-    //   fetchData().then(() => {
-    //     this.isLoading = false;
-    //   });
-    // }
+    emits:['turnOn'],
+    props:['loading'],
+    mounted(){
+    this.$emit('turnOn')
+
+   },
+   
+    
+    
+    
   };
   </script>
   

@@ -1,5 +1,5 @@
 <template>
-  <main-loading v-if="loading"></main-loading>
+  <main-loading :loading="loading" @turnOn="turnOn"></main-loading>
     <div  class="popup">
        <div class="sub">
         <div class="innav">
@@ -27,15 +27,23 @@
 <script>
 import MainLoading from './MainLoading.vue';
     export default{
-      created(){
-       this.loading=true
-      },
-      mounted(){
-        
-          this.loading=false
+      methods:{
+          off(){
+            this.loading = false
+        }, 
+        turnOn(){
+          this.loading = true
+        }
+        },
+        mounted(){
+          setTimeout(() => {
+      // Turn off loading after the simulated delay
+      this.loading = false;
+    }, 600);
+    
 
+        },
         
-      },
         components:{MainLoading},
         props:['selectedCategory'],
         emits:['closePopup','itemSelected'],
@@ -89,6 +97,7 @@ import MainLoading from './MainLoading.vue';
   height: 100px;
   border-radius: 10px;
   margin-right: 20px;
+  max-width: 5rem;
 }
 
 .item-details {

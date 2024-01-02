@@ -1,6 +1,6 @@
 <template>
-  <main-loading v-if="loading"></main-loading>
-    <div id="app">
+  <main-loading :loading="loading" @turnOn="turnOn"></main-loading>
+    <div id="app" >
       <create-own v-if="selectOptions" @closeOptions="selectOptions=false"></create-own>
       <pop-up @itemSelected="selectOptions=true" v-if="selectedCategory" :selectedCategory="selectedCategory" @closePopup="closePopup"></pop-up>
       <div class="main-menu">
@@ -24,14 +24,12 @@
   import PopUp from './Reusables/PopUp.vue';
   import MainLoading from './Reusables/MainLoading.vue';
   export default {
-    created(){
-      this.loading=true
+   
+    mounted() {
+     window.addEventListener('load', this.turnOff);
+},  
 
-    },
-    mounted(){
-      this.loading=false
-
-    },
+  
     components:{
       PopUp, 
       CreateOwn,
@@ -126,17 +124,155 @@
               image: 'cat/cherry.png'
 },
           ] },
-          { id: 3, image:'cup.png', name: 'Cup Ice Cream', description: 'Creamy ice cream in cups.', backgroundColor: '#ffcc29', items: [] },
-          { id: 4, image:'cone.png', name: 'Cone Ice Cream', description: 'Classic cone ice cream delights.', backgroundColor: '#ffcc29', items: [] },
-          { id: 5, image:'shakes.png', name: 'Milkshakes', description: 'Thick and tasty milkshakes.', backgroundColor: '#ffcc29', items: [] },
-          { id: 6, image:'juice.png', name: 'Fresh Juices', description: 'Healthy and refreshing fruit juices.', backgroundColor: '#ffcc29', items: [] },
-          { id: 7, image:'coffee.png', name: 'Coffee', description: 'Rich and aromatic coffee beverages.', backgroundColor: '#ffcc29', items: [] },
-          { id: 8, image:'water.png', name: 'Beverages', description: 'Various beverages to quench your thirst.', backgroundColor: '#ffcc29', items: [] },
+          { id: 3, image:'cup.png', name: 'Cup Ice Cream', description: 'Creamy ice cream in cups.', backgroundColor: '#ffcc29', 
+          items: [
+          {
+              id: 1,
+              name: 'Mango',
+              description: 'The amazing mango Fruit icecream',
+              price: '25 | 13',
+              image: 'cup/mango.png'
+},
+          {
+              id: 2,
+              name: 'Vanila',
+              description: 'The amazing vanilla  icecream',
+              price: '25 | 13',
+              image: 'cup/vanilla.png'
+},
+          {
+              id: 3,
+              name: 'Strawberry',
+              description: 'The amazing strawberry fruit  icecream',
+              price: '25 | 13',
+              image: 'cup/strawberry.png'
+},
+          ] },
+          { id: 4, image:'cone.png', name: 'Cone Ice Cream', description: 'Classic cone ice cream delights.', backgroundColor: '#ffcc29', items:
+           [
+          {
+              id: 1,
+              name: 'Mango',
+              description: 'The amazing mango Fruit icecream',
+              price: '13',
+              image: 'cone/mango.png'
+},
+          {
+              id: 2,
+              name: 'Vanilla',
+              description: 'The amazing vanilla icecream',
+              price: '13',
+              image: 'cone/vanilla.png'
+},
+          {
+              id: 3,
+              name: 'Strawberry',
+              description: 'The amazing strawberry fruit icecream',
+              price: '13',
+              image: 'cone/strawberry.png'
+},
+          ] },
+          { id: 5, image:'shakes.png', name: 'Milkshakes', description: 'Thick and tasty milkshakes.', backgroundColor: '#ffcc29', 
+          items: [
+          {
+              id: 1,
+              name: 'Oreo',
+              description: 'The amazing oreo and banana shake',
+              price: '28',
+              image: 'shakes/oreo.png'
+},
+          {
+              id: 2,
+              name: 'Strawberry',
+              description: 'The amazing strawberry and banana shake',
+              price: '28',
+              image: 'shakes/strawberry.png'
+},
+          {
+              id: 3,
+              name: 'Banana',
+              description: 'The amazing  banana shake',
+              price: '28',
+              image: 'shakes/banana.png'
+},
+          {
+              id: 4,
+              name: 'Mango',
+              description: 'The amazing  mango shake',
+              price: '28',
+              image: 'shakes/mango.png'
+},
+
+          ] },
+          { id: 6, image:'juice.png', name: 'Fresh Juices', description: 'Healthy and refreshing fruit juices.', backgroundColor: '#ffcc29', 
+          items: [
+          {
+              id:1,
+              name: 'Fresh Watermelon Juice',
+              description: 'Inhouse Fresh Juice',
+              price: '12',
+              image: 'juice/watermelon.png'
+},
+          {
+              id:1,
+              name: 'Fresh Orange Juice',
+              description: 'Inhouse Fresh Juice',
+              price: '12',
+              image: 'juice/orange.png'
+},
+          ] },
+          { id: 7, image:'coffee.png', name: 'Coffee', description: 'Rich and aromatic coffee beverages.', backgroundColor: '#ffcc29', 
+          items: [
+          {
+              id:1,
+              name: 'Espresso',
+              description: 'Aromatic Espresso',
+              price: '10 | 17',
+              image: 'coffee/espresso.png'
+},
+          {
+              id:2,
+              name: 'Americano',
+              description: 'Signature Americano',
+              price: '19',
+              image: 'coffee/americano.png'
+},
+          {
+              id:3,
+              name: 'Spanish Latte',
+              description: 'Amazing Latte',
+              price: '21',
+              image: 'coffee/spanish.png'
+},
+          {
+              id:4,
+              name: 'Iced Latte',
+              description: 'Amazing Iced latte',
+              price: '21',
+              image: 'coffee/iced.png'
+},
+          ] },
+          { id: 8, image:'water.png', name: 'Beverages', description: 'Various beverages to quench your thirst.', backgroundColor: '#ffcc29', 
+          items: [
+          {
+              id:1,
+              name: 'Mineral Water',
+              description: 'Quench your thirst',
+              price: '4',
+              image: 'water.png'
+},
+          ] },
         ],
         selectedCategory: null,
       };
     },
     methods: {
+      turnOn(){
+        this.loading=true
+      },
+      turnOff(){
+        this.loading = false
+      },
       showPopup(category) {
         this.selectedCategory = category;
       },
@@ -144,7 +280,6 @@
         this.selectedCategory = null;
       },
       addToCart(item) {
-        // Replace this with your actual add to cart logic
         console.log(`Added ${item.name} to cart`);
       },
     },
@@ -184,6 +319,7 @@
   background-color: #ffcc29; /* McDonald's Yellow */
   border-radius: 10px;
   overflow: hidden;
+  
 }
 
 .category-image img {

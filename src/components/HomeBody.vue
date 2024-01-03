@@ -1,8 +1,14 @@
 <template>
+  <main-cart></main-cart>
   <main-loading :loading="loading" @turnOn="turnOn"></main-loading>
     <div id="app" >
-      <create-own v-if="selectOptions" @closeOptions="selectOptions=false"></create-own>
-      <pop-up @itemSelected="selectOptions=true" v-if="selectedCategory" :selectedCategory="selectedCategory" @closePopup="closePopup"></pop-up>
+      <create-own 
+      v-if="selectOptions" @closeOptions="selectOptions=false"
+      :twoStep="twoStep"
+      :threeStp="threeStep"
+
+      ></create-own>
+      <pop-up @itemSelected="itemSelected" v-if="selectedCategory" :selectedCategory="selectedCategory" @closePopup="closePopup"></pop-up>
       <div class="main-menu">
         <div v-for="category in categories" :key="category.id" class="category" @click="showPopup(category)">
           <div class="category-image" :style="{ backgroundColor: category.backgroundColor }">
@@ -20,6 +26,7 @@
   </template>
   
   <script>
+  import MainCart from './MainCart.vue';
   import CreateOwn from './CreateOwn.vue';
   import PopUp from './Reusables/PopUp.vue';
   import MainLoading from './Reusables/MainLoading.vue';
@@ -33,10 +40,13 @@
     components:{
       PopUp, 
       CreateOwn,
-      MainLoading
+      MainLoading,
+      MainCart
     },
     data() {
       return {
+        twoStep:false,
+        threeStep:false,
         loading:false,
         selectOptions:false,
         categories: [
@@ -267,6 +277,22 @@
       };
     },
     methods: {
+      itemSelected(item){
+        if(item == 'Popsicle Ice Cream' || item == 'Cup Ice Cream' ){
+                this.threeStep = true
+                this.twoStep =false
+                  this.selectOptions=true
+
+        }
+        else if(item =='Frozen Banana' || item== 'Cone Ice Cream'){
+          this.twoStep = true
+          this.threeStep = false
+          this.selectOptions = true
+        }
+        else{
+          this.selectOptions= false
+        }  
+      },
       turnOn(){
         this.loading=true
       },

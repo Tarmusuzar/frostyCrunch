@@ -3,125 +3,162 @@
     <button class="order-button cancel" @click="$emit('closeOptions')">Cancel</button>
 
     <div id="app">
-  <div class="ice-cream-container">
-    <h1 class="title">Make Your Own</h1>
+      <div class="ice-cream-container">
+        <h1 class="title">Make Your Own</h1>
 
-    <!-- Step Navigation -->
-    
+        <!-- Step Navigation -->
+        <div class="step-navigation">
+          <button @click="setStep(1)" :disabled="currentStep === 1" class="step-button" v-if="!twoStep">Size</button>
+          <button @click="setStep(2)" :disabled="currentStep === 2" class="step-button" v-if=" showToppingStep">Topping</button>
+          <button @click="setStep(2)" :disabled="currentStep === 2" class="step-button" v-if=" showDrizzleStep">Drizzle</button>
+          <button @click="setStep(2)" :disabled="currentStep === 2" class="step-button" v-if="twoStep && !threeStep">Review</button>
+          <button @click="setStep(3)" :disabled="currentStep === 3" class="step-button" v-if="!twoStep ">Review</button>
+        </div>
 
-    
+        <!-- Step 1: Select Size -->
+        <div v-show="currentStep === 1" v-if="!twoStep">
+          <label class="label">Choose Size:</label>
+          <div class="button-group">
+            <button @click="selectSize('small')" :class="{ active: selectedSize === 'small' }" class="optBtn">Small</button>
+            <button @click="selectSize('regular')" :class="{ active: selectedSize === 'regular' }" class="optBtn">Regular</button>
+          </div>
+        </div>
 
-    <!-- Step 2: Customize -->
-    <div v-show="currentStep === 1">
-      <label class="label">Select Flavor:</label>
-      <div class="button-group">
-        <button @click="selectFlavor('mango')" :class="{ active: selectedFlavor === 'mango' }"  class="optBtn">Mango</button>
-        <button @click="selectFlavor('strawberry')" :class="{ active: selectedFlavor === 'strawberry' }" class="optBtn">Strawberry</button>
-        <button @click="selectFlavor('cherry')" :class="{ active: selectedFlavor === 'cherry' }" class="optBtn">Cherry</button>
-        <button @click="selectFlavor('vanilla')" :class="{ active: selectedFlavor === 'vanilla' }" class="optBtn">Vanilla</button>
-        <button @click="selectFlavor('banana')" :class="{ active: selectedFlavor === 'banana' }" class="optBtn">Banana</button>
-        <button @click="selectFlavor('pinacolada')" :class="{ active: selectedFlavor === 'pinacolada' }" class="optBtn">Pinacolada</button>
-      </div>
+        <!-- Step 2: Customize -->
+        <div v-show="currentStep === 2">
+          <label class="label">Choose Toppings:</label>
+          <div class="button-group">
+            <!-- Add your topping options here -->
+            <!-- Example: -->
+            <button @click="toggleTopping('m&m')" :class="{ active: isToppingSelected('m&m') }" class="optBtn">M&M</button>
+            <button @click="toggleTopping('oreo')" :class="{ active: isToppingSelected('oreo') }" class="optBtn">Oreo</button>
+            <button @click="toggleTopping('hazelnuts')" :class="{ active: isToppingSelected('hazelnuts') }" class="optBtn">Hazelnuts</button>
+            <button @click="toggleTopping('gingerOatCookies')" :class="{ active: isToppingSelected('gingerOatCookies') }" class="optBtn">Ginger Oat Cookies</button>
+            <button @click="toggleTopping('peanuts')" :class="{ active: isToppingSelected('peanuts') }" class="optBtn">Peanuts</button>
+            <!-- Visual indication of topping limit -->
+            <p v-if="selectedToppings.length >= 2" class="limit-indicator">You can only select up to two toppings.</p>
+          </div>
 
-      <label class="label">Choose Size:</label>
-      <div class="button-group">
-        <button @click="selectSize('small')" :class="{ active: selectedSize === 'small' }" class="optBtn">Small</button>
-        <button @click="selectSize('large')" :class="{ active: selectedSize === 'large' }" class="optBtn">Large</button>
-      </div>
+          <label class="label">Choose Drizzle (AED 4 extra):</label>
+          <div class="button-group">
+            <!-- Add your drizzle options here -->
+            <!-- Example: -->
+            <button @click="selectDrizzle('lotus')" :class="{ active: selectedDrizzle === 'lotus' }" class="optBtn">Lotus (AED 4 extra)</button>
+            <button @click="selectDrizzle('strawberry')" :class="{ active: selectedDrizzle === 'strawberry' }" class="optBtn">Strawberry (AED 4 extra)</button>
+            <button @click="selectDrizzle('darkchocolate')" :class="{ active: selectedDrizzle === 'darkchocolate' }" class="optBtn">Dark Chocolate (AED 4 extra)</button>
+            <button @click="selectDrizzle('strawberry')" :class="{ active: selectedDrizzle === 'strawberry' }" class="optBtn">Strawberry (AED 4 extra)</button>
+            <!-- Visual indication of extra charge -->
+            <p v-if="selectedDrizzle !== 'none'" class="extra-charge-indicator">Drizzle selected: AED 4 extra</p>
+          </div>
+        </div>
 
-      <label class="label">Pick a Dip:</label>
-      <div class="button-group">
-        <button @click="selectDip('milkChocolate')" :class="{ active: selectedDip === 'milkChocolate' }" class="optBtn">Milk Chocolate 🍫</button>
-        <button @click="selectDip('white')" :class="{ active: selectedDip === 'white' }" class="optBtn">White 🍦</button>
-        <button @click="selectDip('dark')" :class="{ active: selectedDip === 'dark' }" class="optBtn">Dark 🍫</button>
-        <button @click="selectDip('peanutButter')" :class="{ active: selectedDip === 'peanutButter' }" class="optBtn">Peanut Butter 🥜</button>
-        <button @click="selectDip('saltedCaramel')" :class="{ active: selectedDip === 'saltedCaramel' }" class="optBtn">Salted Caramel 🍯</button>
+        <!-- Step 3: Review -->
+        <div v-show="currentStep === 3" class="order-summary">
+          <h3>Your Delicious Creation:</h3>
+          <p>🍦 Size: {{ selectedSize }}</p>
+          <p>🍫 Toppings: {{ selectedToppings.join(', ') || 'None' }}</p>
+          <p>🌈 Drizzle: {{ selectedDrizzle === 'none' ? 'None' : selectedDrizzle }}</p>
+          <h3>Total Price: AED {{ totalPrice.toFixed(2) }}</h3>
+        </div>
+
+        <!-- Next/Place Order Button -->
+        <button @click="nextStep" class="order-button" :disabled="currentStep === 3">{{ currentStep === 3 ? 'Add to Cart' : 'Next' }}</button>
       </div>
     </div>
-
-    <!-- Step 3: Review -->
-    <div v-show="currentStep === 3" class="order-summary">
-      <h3>Your Delicious Creation:</h3>
-      <p>🍦 Treat: {{ selectedSize }} {{ selectedFlavor }} {{ selectedTreat }}</p>
-      <p>🍫 Dip: {{ selectedDip }}</p>
-      <p>🎉 Toppings: {{ selectedToppings.join(', ') || 'None' }}</p>
-      <p>🌈 Drizzle: {{ selectedDrizzle === 'none' ? 'None' : selectedDrizzle + ' (AED 4 extra)' }}</p>
-      <h3>Total Price: AED {{ totalPrice.toFixed(2) }}</h3>
-    </div>
-
-    <!-- Next/Place Order Button -->
-    <button  @click="$emit('closeOptions')" class="order-button" :disabled="currentStep === 3">{{ currentStep === 3 ? 'Place Order' : 'Next' }}</button>
-  </div>
-</div>
   </div>
 </template>
 
 <script>
 export default {
-  emit:['closeOptions'],
+  props: ['twoStep', 'threeStep'],
+  emit: ['closeOptions'],
   data() {
     return {
-      currentStep: 1,
-      selectedTreat: 'frozenBanana',
-      selectedFlavor: 'mango',
-      selectedSize: 'small',
-      selectedDip: 'milkChocolate',
       selectedToppings: [],
+      currentStep: this.twoStep? 2:1,
+      selectedSize: 'small',
       selectedDrizzle: 'none',
       totalPrice: 19, // Default price for frozen banana
     };
   },
-  methods: {
-    addToCart(){
-
+  computed: {
+    showToppingStep() {
+      // Show the topping step for all treats except drinks, shakes, coffee, and juices
+      return !['drink', 'shake', 'coffee', 'juice'].includes(this.selectedTreat);
     },
+    showDrizzleStep() {
+      // Show the drizzle step for all treats except drinks, shakes, coffee, and juices
+      return !['drink', 'shake', 'coffee', 'juice'].includes(this.selectedTreat);
+    },
+  },
+  methods: {
     setStep(step) {
       this.currentStep = step;
     },
-    selectTreat(treat) {
-      this.selectedTreat = treat;
+
+    // ... (unchanged methods)
+
+    toggleTopping(topping) {
+      const index = this.selectedToppings.indexOf(topping);
+
+      if (index === -1 && this.selectedToppings.length < 2) {
+        // Topping not in the list, and limit not reached, add it
+        this.selectedToppings.push(topping);
+      } else if (index !== -1) {
+        // Topping already in the list, remove it
+        this.selectedToppings.splice(index, 1);
+      }
     },
-    selectFlavor(flavor) {
-      this.selectedFlavor = flavor;
+
+    isToppingSelected(topping) {
+      return this.selectedToppings.includes(topping);
     },
+
     selectSize(size) {
       this.selectedSize = size;
     },
-    selectDip(dip) {
-      this.selectedDip = dip;
-    },
-    nextStep() {
-      if (this.currentStep < 3) {
-        this.currentStep++;
-      } else {
-        this.placeOrder();
-      }
-    },
-    placeOrder() {
-      console.log('Order Placed:', {
-        Treat: this.selectedSize + ' ' + this.selectedFlavor + ' ' + this.selectedTreat,
-        Dip: this.selectedDip,
-        Toppings: this.selectedToppings,
-        Drizzle: this.selectedDrizzle === 'none' ? 'None' : this.selectedDrizzle,
-        TotalPrice: 'AED ' + this.totalPrice.toFixed(2),
-      });
 
-      // Reset selections after placing the order
-      this.resetSelections();
-    },
-    resetSelections() {
-      this.currentStep = 1;
-      this.selectedTreat = 'frozenBanana';
-      this.selectedFlavor = 'mango';
-      this.selectedSize = 'small';
-      this.selectedDip = 'milkChocolate';
-      this.selectedToppings = [];
+    selectDrizzle(drizzle) {
+      if (this.selectedDrizzle === drizzle) {
+      // If the same drizzle is clicked again, unselect it
       this.selectedDrizzle = 'none';
-      this.totalPrice = 19; // Reset price to default for frozen banana
+    } else {
+      // Otherwise, select the new drizzle
+      this.selectedDrizzle = drizzle;
+    }
+    },
+
+    // Add other methods for selecting toppings and drizzles
+    nextStep() {
+  if (this.currentStep === 1) {
+    // If stepTwo is true, directly go to the last step (Review)
+    // Otherwise, proceed to step 2 (Toppings/Drizzle)
+    this.setStep(this.stepTwo ? 3 : 2);
+  } else if (this.currentStep === 2 && this.showToppingStep) {
+    // If stepTwo is true and it's the second step, and Toppings/Drizzle are shown, proceed to Review
+    // Otherwise, proceed to the next step (Step 3)
+    this.setStep(this.stepTwo ? 3 : 3);
+  } else if (this.currentStep === 3) {
+    // If it's the last step, add to cart
+    this.addToCart();
+  }
+},
+    // Add to cart functionality
+    addToCart() {
+      // const orderDetails = {
+      //   treat: `${this.selectedSize} ${this.selectedFlavor} ${this.selectedTreat}`,
+      //   dip: this.selectedDip,
+      //   toppings: this.selectedToppings,
+      //   drizzle: this.selectedDrizzle,
+      //   totalPrice: this.totalPrice.toFixed(2),
+      // };
+
+      alert()
     },
   },
 };
 </script>
+
 
 <style scoped>
 .popup {
@@ -144,6 +181,13 @@ export default {
   min-width: 15px;
 
   
+}
+.limit-indicator {
+  color: red; /* Adjust the color as needed */
+}
+
+.extra-charge-indicator {
+  color: blue; /* Adjust the color as needed */
 }
 
 .ice-cream-container {
@@ -254,6 +298,14 @@ export default {
 }
 .cancel{
   margin: .4rem 0;
+}
+@media screen and (max-width: 550px) {
+  .step-navigation button {
+    padding: 4px 7px; /* Adjust the padding as needed */
+    font-size: 14px;
+
+     /* Adjust the font size as needed */
+  }
 }
 
 </style>

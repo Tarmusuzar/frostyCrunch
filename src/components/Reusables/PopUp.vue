@@ -6,14 +6,14 @@
             <button class="close-btn" @click="$emit('closePopup')">Back</button>
 
 
-        </div>
-        <div v-for="item in selectedCategory.items" :key="item.id" class="item" @click="$emit('itemSelected',selectedCategory.name)">
+          <div v-for="item in selectedCategory.items" :key="item.id" class="item" @click="$emit('itemSelected',selectedCategory.name)">
           <img :src="require(`@/assets/${item.image}`)" alt="Item Image" />
           <div class="item-details">
             <p class="item-name">{{ item.name }}</p>
             <p class="description">{{ item.description }}</p>
             <p class="price">Dhs {{ item.price }} </p>
             <button @click="addToCart(item)" class="add">Add to Cart</button>
+          </div>
           </div>
         </div>
       </div>

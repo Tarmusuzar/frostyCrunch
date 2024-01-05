@@ -1,14 +1,21 @@
 <template>
-  <main-cart></main-cart>
+  <main-cart :cartItems="cartItems" @deleteItem="deleteItem" :addedToCart="addedToCart"></main-cart>
   <main-loading :loading="loading" @turnOn="turnOn"></main-loading>
     <div id="app" >
       <create-own 
-      v-if="selectOptions" @closeOptions="selectOptions=false"
+      v-if="selectOptions" 
+      @closeOptions="selectOptions=false"
       :twoStep="twoStep"
       :threeStp="threeStep"
+      :itemName="itemName"
+      :itemFlavor="itemFlavor"
+      @customazationDone="customazationDone"
 
       ></create-own>
-      <pop-up @itemSelected="itemSelected" v-if="selectedCategory" :selectedCategory="selectedCategory" @closePopup="closePopup"></pop-up>
+      <pop-up @itemSelected="itemSelected" v-if="selectedCategory" 
+      :selectedCategory="selectedCategory" 
+      :addedToCart="addedToCart"
+      @closePopup="closePopup"></pop-up>
       <div class="main-menu">
         <div v-for="category in categories" :key="category.id" class="category" @click="showPopup(category)">
           <div class="category-image" :style="{ backgroundColor: category.backgroundColor }">
@@ -45,14 +52,18 @@
     },
     data() {
       return {
+        cartItems:[],
+        addedToCart:false,
+        itemName:'',
+        itemFlavor:'',
         twoStep:false,
         threeStep:false,
         loading:false,
         selectOptions:false,
         categories: [
-          { id: 1, image:'kids.png', name: 'Frozen Banana', description: 'Delicious frozen banana treats.', backgroundColor: '#ffcc29', 
+          { id: 1,  image:'kids.png', name: 'Frozen Banana', description: 'Delicious frozen banana treats.', backgroundColor: '#ffcc29', 
           items: [
-            {
+            { cat:'Frozen Banana',
               id: 1,
               name: 'White Chocolate',
               description: 'The classic frozen banana',
@@ -61,6 +72,7 @@
 },
             {
               id: 1,
+              cat:'Frozen Banana',
               name: 'Milk Chocolate',
               description: 'The classic frozen banana',
               price: 19,
@@ -68,6 +80,7 @@
 },
             {
               id: 1,
+              cat:'Frozen Banana',
               name: 'Peanut Butter',
               description: 'The classic frozen banana',
               price: 19,
@@ -76,6 +89,7 @@
             {
               id: 1,
               name: 'Salted Caramel',
+              cat:'Frozen Banana',
               description: 'The classic frozen banana',
               price: 19,
               image: 'cat/caramel.png'
@@ -83,6 +97,7 @@
        
             {
               id: 1,
+              cat:'Frozen Banana',
               name: 'Plain',
               description: 'The classic frozen banana',
               price: 19,
@@ -93,6 +108,7 @@
           items: [
           {
               id: 1,
+              cat:'Popsicle',
               name: 'Mango',
               description: 'The amazing mango Fruit icecream',
               price: '25 | 13',
@@ -100,6 +116,7 @@
 },
           {
               id: 2,
+              cat:'Popsicle',
               name: 'Strawberry',
               description: 'The amazing strawberry Fruit icecream',
               price: '25 | 13',
@@ -107,6 +124,7 @@
 },
           {
               id: 3,
+              cat:'Popsicle',
               name: 'Chestnut & Vanilla',
               description: 'The amazing chesntut Fruit icecream',
               price: '25 | 13',
@@ -114,6 +132,7 @@
 },
           {
               id: 4,
+              cat:'Popsicle',
               name: 'Banana',
               description: 'The amazing banana Fruit icecream',
               price: '25 | 13',
@@ -121,6 +140,7 @@
 },
           {
               id: 5,
+              cat:'Popsicle',
               name: 'Pinacolada',
               description: 'The amazing pineapple Fruit icecream',
               price: '25 | 13',
@@ -128,6 +148,7 @@
 },
           {
               id: 6,
+              cat:'Popsicle',
               name: 'Cherry',
               description: 'The amazing pineapple Fruit icecream',
               price: '25 | 13',
@@ -138,6 +159,7 @@
           items: [
           {
               id: 1,
+              cat:'Cup Icecream',
               name: 'Mango',
               description: 'The amazing mango Fruit icecream',
               price: '25 | 13',
@@ -145,6 +167,7 @@
 },
           {
               id: 2,
+              cat:'Cup Icecream',
               name: 'Vanila',
               description: 'The amazing vanilla  icecream',
               price: '25 | 13',
@@ -152,6 +175,7 @@
 },
           {
               id: 3,
+              cat:'Cup Icecream',
               name: 'Strawberry',
               description: 'The amazing strawberry fruit  icecream',
               price: '25 | 13',
@@ -162,6 +186,7 @@
            [
           {
               id: 1,
+              cat:'Cone Icecream',
               name: 'Mango',
               description: 'The amazing mango Fruit icecream',
               price: '13',
@@ -169,6 +194,8 @@
 },
           {
               id: 2,
+              cat:'Cone Icecream',
+
               name: 'Vanilla',
               description: 'The amazing vanilla icecream',
               price: '13',
@@ -176,6 +203,8 @@
 },
           {
               id: 3,
+              cat:'Cone Icecream',
+
               name: 'Strawberry',
               description: 'The amazing strawberry fruit icecream',
               price: '13',
@@ -186,6 +215,7 @@
           items: [
           {
               id: 1,
+              cat:'Milkshake',
               name: 'Oreo',
               description: 'The amazing oreo and banana shake',
               price: '28',
@@ -193,6 +223,7 @@
 },
           {
               id: 2,
+              cat:'Milkshake',
               name: 'Strawberry',
               description: 'The amazing strawberry and banana shake',
               price: '28',
@@ -200,6 +231,7 @@
 },
           {
               id: 3,
+              cat:'Milkshake',
               name: 'Banana',
               description: 'The amazing  banana shake',
               price: '28',
@@ -207,6 +239,7 @@
 },
           {
               id: 4,
+              cat:'Milkshake',
               name: 'Mango',
               description: 'The amazing  mango shake',
               price: '28',
@@ -218,13 +251,17 @@
           items: [
           {
               id:1,
+              cat:'Watermelon Juice',
               name: 'Fresh Watermelon Juice',
               description: 'Inhouse Fresh Juice',
               price: '12',
-              image: 'juice/watermelon.png'
+              image: 'juice/watermelon.png',
+              added:false
 },
           {
               id:1,
+              added:false,
+              cat:'Orange Juice',
               name: 'Fresh Orange Juice',
               description: 'Inhouse Fresh Juice',
               price: '12',
@@ -235,6 +272,7 @@
           items: [
           {
               id:1,
+              cat:'Coffee',
               name: 'Espresso',
               description: 'Aromatic Espresso',
               price: '10 | 17',
@@ -242,6 +280,7 @@
 },
           {
               id:2,
+              cat:'Coffee',
               name: 'Americano',
               description: 'Signature Americano',
               price: '19',
@@ -249,6 +288,7 @@
 },
           {
               id:3,
+              cat:'Coffee',
               name: 'Spanish Latte',
               description: 'Amazing Latte',
               price: '21',
@@ -256,6 +296,7 @@
 },
           {
               id:4,
+              cat:'Coffee',
               name: 'Iced Latte',
               description: 'Amazing Iced latte',
               price: '21',
@@ -266,6 +307,7 @@
           items: [
           {
               id:1,
+              cat:'Water',
               name: 'Mineral Water',
               description: 'Quench your thirst',
               price: '4',
@@ -277,7 +319,13 @@
       };
     },
     methods: {
-      itemSelected(item){
+      deleteItem(id){
+        this.cartItems.splice(id, 1);
+
+      },
+      itemSelected(item, selectedItem,flavor){
+        this.itemName = item
+        this.itemFlavor = flavor
         if(item == 'Popsicle Ice Cream' || item == 'Cup Ice Cream' ){
                 this.threeStep = true
                 this.twoStep =false
@@ -291,6 +339,20 @@
         }
         else{
           this.selectOptions= false
+          this.loading = true
+          setTimeout(() => {
+          this.loading=false
+        }, 200);
+          this.cartItems.push(selectedItem)
+          this.addedToCart=true
+
+
+          setTimeout(() => {
+            this.addedToCart=false
+          }, 1000);
+          
+          
+          
         }  
       },
       turnOn(){
@@ -308,6 +370,14 @@
       addToCart(item) {
         console.log(`Added ${item.name} to cart`);
       },
+      customazationDone(data){
+        this.loading = true
+        setTimeout(() => {
+          this.loading=false
+        }, 200);
+        this.selectOptions= false
+        this.cartItems.push(data)
+      }
     },
   };
 

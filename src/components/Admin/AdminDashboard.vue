@@ -5,7 +5,8 @@
     title="Sales "
     opt1="Sales"
     opt2="Place Order"
-    opt3="Reports"
+    opt3="Reviews"
+    opt10="Orders"
     
     ></home-nav>
 
@@ -85,6 +86,14 @@ export default {
       }
       else if(opt =='Place Order'){
         this.$router.push('/placeOrder')
+
+      }
+      else if(opt =='Orders'){
+        this.$router.push('/NnNKtqfDKRdi59FZOeL')
+
+      }
+      else if(opt =='Reviews'){
+        this.$router.push('/reviews')
 
       }
     },

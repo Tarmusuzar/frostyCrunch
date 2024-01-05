@@ -17,6 +17,7 @@
         <li class="nav-item" @click="nextAction(opt1)"><i class="fas fa-home" ></i> {{ opt1 }}</li>
         <li class="nav-item" @click="nextAction(opt2)"><i class="fas fa-store"></i> {{ opt2 }}</li>
         <li class="nav-item" @click="nextAction(opt3)"><i class="fas fa-envelope"></i> {{ opt3 }} </li>
+        <li class="nav-item" @click="nextAction(opt10)">{{ opt10 }} </li>
       </ul>
     </nav>
   </div>
@@ -39,7 +40,7 @@ export default {
 
     }
   },
-  props:['title','opt1','opt2','opt3','opt4','opt5','opt6',],
+  props:['title','opt1','opt2','opt3','opt10'],
   emits:['navClicked']
 };
 </script>

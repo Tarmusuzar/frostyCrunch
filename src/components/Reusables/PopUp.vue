@@ -6,14 +6,18 @@
             <button class="close-btn" @click="$emit('closePopup')">Back</button>
 
 
-          <div v-for="item in selectedCategory.items" :key="item.id" class="item" @click="$emit('itemSelected',selectedCategory.name)">
-          <img :src="require(`@/assets/${item.image}`)" alt="Item Image" />
-          <div class="item-details">
-            <p class="item-name">{{ item.name }}</p>
+          <div v-for="item in selectedCategory.items" :key="item.id" class="item" @click="$emit('itemSelected',selectedCategory.name, item, item.name)">
+          <div class="itm">
+            <img :src="require(`@/assets/${item.image}`)" alt="Item Image" />
+             <div class="item-details">
+            <p class="item-name" style="white-space: nowrap;">{{ item.name }}</p>
             <p class="description">{{ item.description }}</p>
             <p class="price">Dhs {{ item.price }} </p>
-            <button @click="addToCart(item)" class="add">Add to Cart</button>
           </div>
+          </div>
+          <i :class="getIconClass(item)" @click="toggleAddedToCart(item)"></i>
+
+
           </div>
         </div>
       </div>
@@ -28,6 +32,18 @@
 import MainLoading from './MainLoading.vue';
     export default{
       methods:{
+        getIconClass(item) {
+      return item.addedToCart ? 'fas fa-check' : 'fas fa-plus addBtn';
+    },
+    toggleAddedToCart(item) {
+      item.addedToCart = !item.addedToCart;
+      // Add any additional logic you need when the item is clicked
+      // For example, you can set a timer to revert the class after 2 seconds
+      setTimeout(() => {
+        item.addedToCart = false;
+      }, 4000);
+    
+  },
           off(){
             this.loading = false
         }, 
@@ -45,7 +61,7 @@ import MainLoading from './MainLoading.vue';
         },
         
         components:{MainLoading},
-        props:['selectedCategory'],
+        props:['selectedCategory','addedToCart'],
         emits:['closePopup','itemSelected'],
         data(){
           return{
@@ -63,7 +79,7 @@ import MainLoading from './MainLoading.vue';
   height: 100%;
   background: rgba(51, 51, 51, 0.95);
 
-  z-index: 999;
+  z-index: 900;
   overflow: scroll;
 }
 .sub{
@@ -71,7 +87,7 @@ import MainLoading from './MainLoading.vue';
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: .4rem;
 }
 
 .popup-title {
@@ -81,14 +97,25 @@ import MainLoading from './MainLoading.vue';
   margin-bottom: 20px;
 }
 
+.itm{
+  display: flex;
+  max-width: 90%;
+
+  
+}
+
 .item {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
   background-color: white;
-  width: 90%;
+  width: 100%;
   padding: .4rem;
   border-radius: 5px;
+  justify-content: space-between;
+  padding-right:  2rem;
+  
+
 
 }
 
@@ -104,11 +131,13 @@ import MainLoading from './MainLoading.vue';
   flex-grow: 1;
 }
 .add{
+    flex: 1;
     padding: .2em .4rem;
     color:  white;
     border: 1px solid rgb(226, 222, 222);
     border-radius: 4px;
     background-color: rgb(9, 189, 24);
+   min-width: 5rem;
 
 }
 
@@ -136,7 +165,7 @@ import MainLoading from './MainLoading.vue';
   border-radius: 5px;
   width: 6rem;
   padding: 1rem;
-
+  margin-bottom: .5rem;
   text-align: center;
   transition: background-color 0.3s ease-in-out;
 }
@@ -146,7 +175,14 @@ import MainLoading from './MainLoading.vue';
 }
 .innav{
 width: 90%;
-margin-bottom: 1rem;
+margin: 1rem;
 
+}
+.addBtn{
+  color: white;
+  border: 1px solid white;
+  border-radius: 50%;
+  padding: .2rem;
+  background-color: green;
 }
 </style>

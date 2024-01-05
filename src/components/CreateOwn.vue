@@ -11,7 +11,7 @@
           <button @click="setStep(1)" :disabled="currentStep === 1" class="step-button" v-if="!twoStep">Size</button>
           <button @click="setStep(2)" :disabled="currentStep === 2" class="step-button" v-if=" showToppingStep">Topping</button>
           <button @click="setStep(2)" :disabled="currentStep === 2" class="step-button" v-if=" showDrizzleStep">Drizzle</button>
-          <button @click="setStep(2)" :disabled="currentStep === 2" class="step-button" v-if="twoStep && !threeStep">Review</button>
+          <button @click="setStep(2)" :disabled="currentStep === 3" class="step-button" v-if="twoStep && !threeStep">Review</button>
           <button @click="setStep(3)" :disabled="currentStep === 3" class="step-button" v-if="!twoStep ">Review</button>
         </div>
 
@@ -30,11 +30,11 @@
           <div class="button-group">
             <!-- Add your topping options here -->
             <!-- Example: -->
-            <button @click="toggleTopping('m&m')" :class="{ active: isToppingSelected('m&m') }" class="optBtn">M&M</button>
-            <button @click="toggleTopping('oreo')" :class="{ active: isToppingSelected('oreo') }" class="optBtn">Oreo</button>
-            <button @click="toggleTopping('hazelnuts')" :class="{ active: isToppingSelected('hazelnuts') }" class="optBtn">Hazelnuts</button>
-            <button @click="toggleTopping('gingerOatCookies')" :class="{ active: isToppingSelected('gingerOatCookies') }" class="optBtn">Ginger Oat Cookies</button>
-            <button @click="toggleTopping('peanuts')" :class="{ active: isToppingSelected('peanuts') }" class="optBtn">Peanuts</button>
+            <button @click="toggleTopping('M & M')" :class="{ active: isToppingSelected('M & M') }" class="optBtn">M&M</button>
+            <button @click="toggleTopping('Oreo')" :class="{ active: isToppingSelected('Oreo') }" class="optBtn">Oreo</button>
+            <button @click="toggleTopping('Hazelnuts')" :class="{ active: isToppingSelected('Hazelnuts') }" class="optBtn">Hazelnuts</button>
+            <button @click="toggleTopping('Ginger Oat Cookies')" :class="{ active: isToppingSelected('Ginger Oat Cookies') }" class="optBtn">Ginger Oat Cookies</button>
+            <button @click="toggleTopping('Peanuts')" :class="{ active: isToppingSelected('Peanuts') }" class="optBtn">Peanuts</button>
             <!-- Visual indication of topping limit -->
             <p v-if="selectedToppings.length >= 2" class="limit-indicator">You can only select up to two toppings.</p>
           </div>
@@ -43,10 +43,10 @@
           <div class="button-group">
             <!-- Add your drizzle options here -->
             <!-- Example: -->
-            <button @click="selectDrizzle('lotus')" :class="{ active: selectedDrizzle === 'lotus' }" class="optBtn">Lotus (AED 4 extra)</button>
-            <button @click="selectDrizzle('strawberry')" :class="{ active: selectedDrizzle === 'strawberry' }" class="optBtn">Strawberry (AED 4 extra)</button>
-            <button @click="selectDrizzle('darkchocolate')" :class="{ active: selectedDrizzle === 'darkchocolate' }" class="optBtn">Dark Chocolate (AED 4 extra)</button>
-            <button @click="selectDrizzle('strawberry')" :class="{ active: selectedDrizzle === 'strawberry' }" class="optBtn">Strawberry (AED 4 extra)</button>
+            <button @click="selectDrizzle('Lotus-Dr')" :class="{ active: selectedDrizzle === 'Lotus-Dr' }" class="optBtn">Lotus (AED 4 extra)</button>
+            <button @click="selectDrizzle('Strawberry-Dr')" :class="{ active: selectedDrizzle === 'Strawberry-Dr' }" class="optBtn">Strawberry (AED 4 extra)</button>
+            <button @click="selectDrizzle('Dark Chocolate-Dr')" :class="{ active: selectedDrizzle === 'Dark Chocolate-Dr' }" class="optBtn">Dark Chocolate (AED 4 extra)</button>
+            <button @click="selectDrizzle('Caramel-Dr')" :class="{ active: selectedDrizzle === 'Caramel-Dr' }" class="optBtn">Caramel (AED 4 extra)</button>
             <!-- Visual indication of extra charge -->
             <p v-if="selectedDrizzle !== 'none'" class="extra-charge-indicator">Drizzle selected: AED 4 extra</p>
           </div>
@@ -55,14 +55,16 @@
         <!-- Step 3: Review -->
         <div v-show="currentStep === 3" class="order-summary">
           <h3>Your Delicious Creation:</h3>
-          <p>🍦 Size: {{ selectedSize }}</p>
+          <p v-if="showSize">🍦 Size: {{ selectedSize }}</p>
+          <p>Flavor: {{ itemFlavor }}</p>
           <p>🍫 Toppings: {{ selectedToppings.join(', ') || 'None' }}</p>
           <p>🌈 Drizzle: {{ selectedDrizzle === 'none' ? 'None' : selectedDrizzle }}</p>
-          <h3>Total Price: AED {{ totalPrice.toFixed(2) }}</h3>
+          <h3>Total Price: AED {{ totalPrice }} </h3>
         </div>
 
         <!-- Next/Place Order Button -->
-        <button @click="nextStep" class="order-button" :disabled="currentStep === 3">{{ currentStep === 3 ? 'Add to Cart' : 'Next' }}</button>
+        <button @click="nextStep" class="order-button" :disabled="currentStep === 3" v-if="currentStep!=3">Next</button>
+        <button @click="nextStep" class="order-button" v-if="currentStep==3">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -70,18 +72,38 @@
 
 <script>
 export default {
-  props: ['twoStep', 'threeStep'],
+  props: ['twoStep', 'threeStep','itemName','itemFlavor'],
   emit: ['closeOptions'],
   data() {
     return {
       selectedToppings: [],
       currentStep: this.twoStep? 2:1,
       selectedSize: 'small',
-      selectedDrizzle: 'none',
-      totalPrice: 19, // Default price for frozen banana
+      selectedDrizzle: '',
+      
     };
   },
   computed: {
+    showSize() {
+  return this.itemName !== 'Frozen Banana' && this.itemName !== 'Cone Ice Cream';
+},
+
+    totalPrice() {
+      if (this.itemName === 'Frozen Banana') {
+            return this.selectedDrizzle !== 'none' ? 23 : 19;
+        } else if ((this.itemName === 'Popsicle Ice Cream' || this.itemName === 'Cup Ice Cream') && this.selectedSize === 'small') {
+          return this.selectedDrizzle !== 'none' ? 17 : 13;
+        } else if ((this.itemName === 'Popsicle Ice Cream'  || this.itemName === 'Cup Ice Cream') && this.selectedSize === 'regular') {
+          return this.selectedDrizzle !== 'none' ? 29 : 25;
+        }else if(this.itemName === 'Cone Ice Cream'){
+          return this.selectedDrizzle !== 'none' ? 17 : 13;
+
+        }
+         else {
+          return 0;
+        }
+  
+    },
     showToppingStep() {
       // Show the topping step for all treats except drinks, shakes, coffee, and juices
       return !['drink', 'shake', 'coffee', 'juice'].includes(this.selectedTreat);
@@ -140,20 +162,20 @@ export default {
     this.setStep(this.stepTwo ? 3 : 3);
   } else if (this.currentStep === 3) {
     // If it's the last step, add to cart
-    this.addToCart();
+    this.addToCart()
   }
 },
     // Add to cart functionality
     addToCart() {
-      // const orderDetails = {
-      //   treat: `${this.selectedSize} ${this.selectedFlavor} ${this.selectedTreat}`,
-      //   dip: this.selectedDip,
-      //   toppings: this.selectedToppings,
-      //   drizzle: this.selectedDrizzle,
-      //   totalPrice: this.totalPrice.toFixed(2),
-      // };
+      let orderDetails = {
+        cat:this.itemName,
+        name: `${this.selectedSize} | ${this.itemFlavor} | ${this.selectedToppings } | ${this.selectedDrizzle}`,
+        price: this.totalPrice,
+      };
 
-      alert()
+      this.$emit('customazationDone', orderDetails)
+
+      orderDetails = {}
     },
   },
 };

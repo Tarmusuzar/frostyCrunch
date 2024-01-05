@@ -1,5 +1,7 @@
 <template>
   <div class="rate-your-visit-container">
+    <main-loading :loading="loading"></main-loading>
+
     <h1 class="title">Rate Your Visit</h1>
 
     <div class="rating-section">
@@ -18,6 +20,18 @@
         </div>
         <p class="selected-rating" :style="{ color: getRatingColor(ratings.service) }">Selected Rating: {{ ratings.service }}</p>
       </div>
+      <div class="rating-option">
+        <p class="rating-label">Flavor Tested</p>
+        <div>
+          <button class="flavor" :class="{ 'selected-flavor': ratings.flavor === 'Milk Chocolate' }" @click="selectFlavor('Milk Chocolate')">Milk Chocolate</button>
+          <button class="flavor" :class="{ 'selected-flavor': ratings.flavor === 'White Chocolate' }" @click="selectFlavor('White Chocolate')">White Chocolate</button>
+          <button class="flavor" :class="{ 'selected-flavor': ratings.flavor === 'Dark Chocolate' }" @click="selectFlavor('Dark Chocolate')">Dark Chocolate</button>
+          <button class="flavor" :class="{ 'selected-flavor': ratings.flavor === 'Salted Caramel' }" @click="selectFlavor('Salted Caramel')">Salted Caramel</button>
+          <button class="flavor" :class="{ 'selected-flavor': ratings.flavor === 'Peanut Butter' }" @click="selectFlavor('Peanut Butter')">Peanut Butter</button>
+        </div>
+        <p class="selected-rating" :style="{ color: getRatingColor(ratings.service) }">Selected Flavor: {{ ratings.flavor }}</p>
+
+      </div>
     </div>
 
     <button @click="submitRating" class="submit-button">Submit Rating</button>
@@ -25,12 +39,16 @@
 </template>
 
 <script>
+import MainLoading from './Reusables/MainLoading.vue';
 export default {
+  components:{MainLoading},
   data() {
     return {
+      loading:false,
       ratings: {
         foodQuality: 0,
         service: 0,
+        flavor: '',
       },
     };
   },
@@ -38,10 +56,32 @@ export default {
     selectRating(category, rating) {
       this.ratings[category] = rating;
     },
+    selectFlavor(selectedFlavor) {
+      this.ratings.flavor = selectedFlavor;
+    },
     submitRating() {
-      // Perform actions with the ratings (e.g., send to the server)
-      console.log('Submitted Ratings:', this.ratings);
-      // You can also add a thank you message or redirect the user to another page
+      if (
+        this.ratings.foodQuality === 0 ||
+        this.ratings.service === 0 ||
+        this.ratings.flavor === ''
+      ) {
+        alert('Please complete all fields before submitting.');
+      } else {
+        this.loading=true
+
+        // Perform actions with the ratings and flavor (e.g., send to the server)
+        fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/ruv.json', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.ratings),
+        }).then(() => {
+          setTimeout(() => {
+            this.$router.go('/');
+          }, 1000);
+        });
+      }
     },
     getRatingColor(rating) {
       if (rating < 5) {
@@ -57,6 +97,19 @@ export default {
 </script>
 
 <style scoped>
+
+.selected-flavor {
+  background-color: green;
+  color: #ffffff;
+  border: 1px solid white;
+}
+
+.selected-flavor {
+  background-color: green;
+  color: #ffffff;
+  border: 1px solid white;
+}
+
 .rate-your-visit-container {
   display: flex;
   flex-direction: column;
@@ -121,8 +174,9 @@ export default {
   margin-top: 5px;
 }
 
+
 .submit-button {
-  background-color: #4caf50;
+  background-color: green;
   color: #fff;
   padding: 15px 30px;
   border: none;
@@ -136,6 +190,13 @@ export default {
 .submit-button:hover {
   background-color: #45a049;
 }
+.flavor{
+  font-size: 1rem;
+  margin: .3rem;
+  padding: .5rem;
+  border:1px solid rgb(156, 154, 154);
+  border-radius:5px;
+}
 
 @media screen and (max-width: 768px) {
   .rating-option {
@@ -143,3 +204,4 @@ export default {
   }
 }
 </style>
+
